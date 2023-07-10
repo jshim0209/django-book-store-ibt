@@ -1,35 +1,33 @@
 name: Book Store CI/CD
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 jobs:
   Deploy-on-AWS:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout 
-      uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
-    - name: Update Docker Compose File on VM
-      uses: appleboy/scp-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.KEY }}
-        source: './*'
-        target: "/home/ubuntu/djanog-book-store-ibt"      
-          
+      - name: Update Docker Compose File on VM
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          source: "./*"
+          target: "/home/ubuntu/django-book-store-ibt"
 
-    - name: Deploy Docker Compose
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.KEY }}
-        script: |
-          cd /home/ubuntu/djanog-book-store-ibt
-          docker-compose down --rmi all
-          docker-compose up -d
-          
+      - name: Deploy Docker Compose
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          script: |
+            cd /home/ubuntu/django-book-store-ibt
+            docker-compose down --rmi all
+            docker-compose up -d
